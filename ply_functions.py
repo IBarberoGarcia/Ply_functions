@@ -2,7 +2,7 @@ import numpy as np
 
 def read_ply(ply_file):
     '''Gets an ASCII ply file and returns a dictionary with x,y,z,nx,ny,nz,red,green,blue, faces (the ones that are presented
-    in the file. If some value is missed (eg no normals) the function will work and the dict will not have that value.'''
+    in the file. If some value is missed (eg no normals) the dict will not have that value.'''
     properties=[]#List of property names
     with open(ply_file, 'r') as f:
         lines = f.readlines()
