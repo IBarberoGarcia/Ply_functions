@@ -2,7 +2,7 @@ import numpy as np
 
 def read_ply(ply_file):
     '''Gets an ASCII ply file and returns a dictionary with x,y,z,nx,ny,nz,red,green,blue, faces (the ones that are presented
-    in the file. If some value is missed (eg no normals) the dict will not have that value.'''
+    in the file. If some value is missed (eg no normals) the function will work and the dict will not have that value.'''
     properties=[]#List of property names
     with open(ply_file, 'r') as f:
         lines = f.readlines()
@@ -11,11 +11,11 @@ def read_ply(ply_file):
     for line in lines:
         if line.startswith('element vertex'):
             verts_num = int(line.split(' ')[-1])
-        if line.startswith('element face'):
+        elif line.startswith('element face'):
             faces_num = int(line.split(' ')[-1])
-        if line.startswith('property'):
+        elif line.startswith('property'):
             properties.append(line.split(' ')[-1].strip('\n'))
-        if line.startswith('end_header'):
+        elif line.startswith('end_header'):
             start_line=j+1
             break
         j+=1
@@ -34,19 +34,19 @@ def read_ply(ply_file):
         attr=properties[i]
         if attr == "x":
             ply_dict['x'] = verts.transpose()[i]
-        if attr == "y":
+        elif attr == "y":
             ply_dict['y'] = verts.transpose()[i]
-        if attr == "z":
+        elif attr == "z":
             ply_dict['z'] = verts.transpose()[i]
-        if attr == "nx":
+        elif attr == "nx":
             ply_dict['nx'] = verts.transpose()[i]
-        if attr == "ny":
+        elif attr == "ny":
             ply_dict['ny'] = verts.transpose()[i]
-        if attr == "nz":
+        elif attr == "nz":
             ply_dict['nz'] = verts.transpose()[i]
-        if attr == "red":
+        elif attr == "red":
             ply_dict['red'] = [int(num) for num in verts.transpose()[i]]
-        if attr == "green":
+        elif attr == "green":
             ply_dict['green'] = [int(num) for num in verts.transpose()[i]]
         if attr == "blue":
             ply_dict['blue'] = [int(num) for num in verts.transpose()[i]]
