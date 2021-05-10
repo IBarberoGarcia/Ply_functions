@@ -52,3 +52,55 @@ def read_ply(ply_file):
             ply_dict['blue'] = [int(num) for num in verts.transpose()[i]]
         i+=1
     return ply_dict
+
+
+def write_ply(ply_dict, out_file):
+    '''Receives a dictionary with x,y,z (needed) and nx,ny,nz, red, green, blue, faces (optional) and creates an
+    ASCII ply file'''
+    f = open(out_file, "w")
+    f.write('ply\nformat ascii 1.0\n')
+    f.write('element vertex ' + str(len(ply_dict['x'])) + '\n')
+    f.write('property float x\nproperty float y\nproperty float z\n')
+    vertex=[]
+    vertex.append(ply_dict['x'])
+    vertex.append(ply_dict['y'])
+    vertex.append(ply_dict['z'])
+    colors=[]#Colors are int, so they need to be separated
+    if 'nx' in ply_dict:
+        f.write('property float nx\nproperty float ny\nproperty float nz\n')
+        vertex.append(ply_dict['nx'])
+        vertex.append(ply_dict['ny'])
+        vertex.append(ply_dict['nz'])
+    if 'red' in ply_dict:
+        color=True
+        f.write('property uchar red\nproperty uchar green\nproperty uchar blue\n')
+        colors.append(ply_dict['red'])
+        colors.append(ply_dict['green'])
+        colors.append(ply_dict['blue'])
+        
+    if 'faces' in ply_dict:
+        f.write('element face ' + str(len(ply_dict['faces'])) + '\nproperty list uchar int vertex_indices\n')
+    else:    
+        f.write('element face 0\n')
+    f.write('end_header')    
+    
+    vertex=np.array(vertex).transpose()
+    colors=np.array(colors).transpose()
+    i=0
+    while i<len(vertex):
+        point=vertex[i]
+        f.write('\n')
+        for value in point:
+            f.write(str(value)+ ' ')
+        if color:
+            f.write(str(colors[i][0])+ ' ')
+            f.write(str(colors[i][1])+ ' ')
+            f.write(str(colors[i][2])+ ' ')
+        i+=1
+        
+    if 'faces' in ply_dict:
+        for face in ply_dict['faces']:
+            f.write('\n3 ' + str(face[0]) + ' ' + str(face[1]) + ' ' + str(face[2]))
+        f.write('\n')
+    f.close()
+    
