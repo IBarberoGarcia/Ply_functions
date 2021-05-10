@@ -65,6 +65,7 @@ def write_ply(ply_dict, out_file):
     vertex.append(ply_dict['x'])
     vertex.append(ply_dict['y'])
     vertex.append(ply_dict['z'])
+    color=False
     colors=[]#Colors are int, so they need to be separated
     if 'nx' in ply_dict:
         f.write('property float nx\nproperty float ny\nproperty float nz\n')
